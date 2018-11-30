@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?><extensionAttribute>
+<displayName>Adobe Creative Cloud - Device License Remaining Days</displayName>
+<description>This Extension Attribute determines the expiry date of an Adobe Enterprise Device License serial number and works out how many days are remaining until it expires.&#13;
+&#13;
+If no serial number is found, the result will have no value.&#13;
+&#13;
+This Extension Attribute requires the AdobeExpiryCheck binary to work</description>
+<dataType>number</dataType>
+<scriptContentsMac>#!/bin/bash&#13;
+#&#13;
+# Written by Neil Martin - 2018-11-29&#13;
+# &#13;
+# This script determines the expiry date of an Adobe Enterprise Device License &#13;
+# serial number and works out how many days are remaining until it expires.&#13;
+#&#13;
+# If no serial number is found, the result will have no value.&#13;
+#&#13;
+# This script requires the AdobeExpiryCheck binary to work&#13;
+# Get it from https://helpx.adobe.com/enterprise/kb/volume-license-expiration-check.html&#13;
+#&#13;
+###########&#13;
+#&#13;
+# Edit the variables below as needed:&#13;
+#&#13;
+# Set $product to 'Acrobat' for Adobe Acrobat, or 'CreativeCloud' for Creative Cloud&#13;
+# Set $toolpath to the path where the AdobeExpiryCheck binary is installed&#13;
+&#13;
+product=CreativeCloud&#13;
+toolpath="/usr/local/bin"&#13;
+&#13;
+# Do not edit below this line&#13;
+&#13;
+rawdate=$("$toolpath"/AdobeExpiryCheck | grep "$product" | sed 's/[^0-9]*//g' | tail -c 9)&#13;
+&#13;
+if [[ "$rawdate" == "" ]]; then&#13;
+	echo "&lt;result&gt;""&lt;/result&gt;"&#13;
+	exit 0&#13;
+else&#13;
+	realdate=$(date -j -f "%Y%m%d" "$rawdate" +'%Y-%m-%d')&#13;
+    dateexpires=$(/bin/date -jf '%Y-%m-%d' "$realdate" "+%s")&#13;
+	datetoday=$(/bin/date "+%s")&#13;
+	echo "&lt;result&gt;$(((dateexpires - datetoday)/86400))&lt;/result&gt;"&#13;
+fi&#13;
+&#13;
+exit 0</scriptContentsMac>
+</extensionAttribute>
