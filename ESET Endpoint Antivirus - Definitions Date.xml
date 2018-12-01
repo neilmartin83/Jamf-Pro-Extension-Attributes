@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?><extensionAttribute>
+<displayName>ESET Endpoint Antivirus - Definitions Date</displayName>
+<description>Written by Neil Martin - 2018-12-01&#13;
+&#13;
+This Extension Attribute returns the date installed definitions were released. See https://support.eset.com/kb85/ for the latest version released.&#13;
+&#13;
+Returns no value if ESET Antivirus is not installed.</description>
+<dataType>date</dataType>
+<scriptContentsMac>#!/bin/bash&#13;
+&#13;
+esets_daemon="/Applications/ESET Endpoint Antivirus.app/Contents/MacOS/esets_daemon"&#13;
+&#13;
+if [[ -e "$esets_daemon" ]]; then&#13;
+	esetsigdate=$("$esets_daemon" --status | grep AVSigsDate | cut -d "=" -f 2 | sed -e 's/T/ /g')&#13;
+	echo "&lt;result&gt;$esetsigdate&lt;/result&gt;"&#13;
+	exit 0&#13;
+else&#13;
+	echo "&lt;result&gt;""&lt;/result&gt;"&#13;
+fi&#13;
+&#13;
+exit 0</scriptContentsMac>
+</extensionAttribute>
