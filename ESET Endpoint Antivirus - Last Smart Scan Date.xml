@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?><extensionAttribute>
+<displayName>ESET Endpoint Antivirus - Last Smart Scan Date</displayName>
+<description>Written by Neil Martin - 2018-12-02&#13;
+&#13;
+This Extension Attribute returns the date the last successful on demand Smart Scan.&#13;
+&#13;
+Returns no value if ESET Antivirus is not installed or a Smart Scan has never been run.</description>
+<dataType>date</dataType>
+<scriptContentsMac>#!/bin/bash&#13;
+&#13;
+esets_daemon="/Applications/ESET Endpoint Antivirus.app/Contents/MacOS/esets_daemon"&#13;
+&#13;
+if [[ -e "$esets_daemon" ]]; then&#13;
+	esetqsdate=$("$esets_daemon" --status | grep LastQuickScanDate | cut -d "=" -f 2 | sed -e 's/T/ /g')&#13;
+	if [[ $esetqsdate = "" ]]; then&#13;
+		echo "&lt;result&gt;""&lt;/result&gt;"&#13;
+		exit 0&#13;
+	else&#13;
+		echo "&lt;result&gt;$esetqsdate&lt;/result&gt;"&#13;
+		exit 0&#13;
+	fi&#13;
+else&#13;
+	echo "&lt;result&gt;""&lt;/result&gt;"&#13;
+fi&#13;
+&#13;
+exit 0</scriptContentsMac>
+</extensionAttribute>
