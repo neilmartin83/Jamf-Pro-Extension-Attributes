@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?><extensionAttribute>
+<displayName>ESET Endpoint Antivirus - Number of Realtime Cleaned Objects</displayName>
+<description>Written by Neil Martin - 2018-12-03&#13;
+&#13;
+This Extension Attribute returns the total number of cleaned infected objects found by ESET's Realtime scanner.&#13;
+&#13;
+Returns no value if ESET Antivirus is not installed.</description>
+<dataType>number</dataType>
+<scriptContentsMac>#!/bin/bash&#13;
+&#13;
+esets_daemon="/Applications/ESET Endpoint Antivirus.app/Contents/MacOS/esets_daemon"&#13;
+&#13;
+if [[ -e "$esets_daemon" ]]; then&#13;
+	esetrtcln=$("$esets_daemon" --status | grep RTPStatistics | cut -d "=" -f 2 | cut -d "|" -f 2 | cut -d ":" -f 2)&#13;
+	esetrtdel=$("$esets_daemon" --status | grep RTPStatistics | cut -d "=" -f 2 | cut -d "|" -f 3 | cut -d ":" -f 2)&#13;
+	echo "&lt;result&gt;$(($esetrtcln + $esetrtdel))&lt;/result&gt;"&#13;
+	exit 0&#13;
+else&#13;
+	echo "&lt;result&gt;""&lt;/result&gt;"&#13;
+fi&#13;
+&#13;
+exit 0</scriptContentsMac>
+</extensionAttribute>
