@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?><extensionAttribute>
+<displayName>Kernel Panics in last 7 days</displayName>
+<description/>
+<dataType>number</dataType>
+<scriptContentsMac>#!/bin/bash&#13;
+&#13;
+PanicLogCount=$(find /Library/Logs/DiagnosticReports -Btime -7 -name *.panic | awk 'END{print NR}')&#13;
+&#13;
+echo "&lt;result&gt;$PanicLogCount&lt;/result&gt;"</scriptContentsMac>
+</extensionAttribute>
