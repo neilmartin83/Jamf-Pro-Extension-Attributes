@@ -7,6 +7,7 @@ This script requires the AdobeExpiryCheck binary to work.</description>
 <scriptContentsMac>#!/bin/bash&#13;
 #&#13;
 # Written by Neil Martin - 2018-11-29&#13;
+# Modified 2019-05-21 - a more elegant way to get the date code from AdobeExpriryCheck - thanks to Kendall Johnson&#13;
 # &#13;
 # This script determines if there is an Adobe Creative Cloud License serial number present.&#13;
 #&#13;
@@ -30,7 +31,7 @@ if [[ ! -e "$toolpath"/AdobeExpiryCheck ]]; then&#13;
     exit 0&#13;
 fi&#13;
 &#13;
-rawdate=$("$toolpath"/AdobeExpiryCheck | grep "$product" | sed 's/[^0-9]*//g' | tail -c 9)&#13;
+rawdate=$("$toolpath"/AdobeExpiryCheck | grep "$product" | awk '{print $3}')&#13;
 &#13;
 if [[ "$rawdate" == "" ]]; then&#13;
 	echo "&lt;result&gt;No&lt;/result&gt;"&#13;

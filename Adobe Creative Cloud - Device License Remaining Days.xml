@@ -9,6 +9,7 @@ This Extension Attribute requires the AdobeExpiryCheck binary to work</descripti
 <scriptContentsMac>#!/bin/bash&#13;
 #&#13;
 # Written by Neil Martin - 2018-11-29&#13;
+# Modified 2019-05-21 - a more elegant way to get the date code from AdobeExpriryCheck - thanks to Kendall Johnson&#13;
 # &#13;
 # This script determines the expiry date of an Adobe Enterprise Device License &#13;
 # serial number and works out how many days are remaining until it expires.&#13;
@@ -30,7 +31,7 @@ toolpath="/usr/local/bin"&#13;
 &#13;
 # Do not edit below this line&#13;
 &#13;
-rawdate=$("$toolpath"/AdobeExpiryCheck | grep "$product" | sed 's/[^0-9]*//g' | tail -c 9)&#13;
+rawdate=$("$toolpath"/AdobeExpiryCheck | grep "$product" | awk '{print $3}')&#13;
 &#13;
 if [[ "$rawdate" == "" ]]; then&#13;
 	echo "&lt;result&gt;""&lt;/result&gt;"&#13;
